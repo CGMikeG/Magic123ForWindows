@@ -42,16 +42,20 @@ Official PyTorch Implementation of Magic123: One Image to High-Quality 3D Object
 
 
 # Install
-We only test on Ubuntu system. Make sure git, wget, Eigen are installed.  
+Tested on Windows 10 and 11 using Cuda 11.8
 ```
-apt update && apt upgrade
-apt install git wget libeigen3-dev -y
+git clone https://github.com/CGMikeG/Magic123ForWindows.git
 ```
 
 ### Install Environment 
 
-```bash
-source install.sh
+```
+pip install magic123WinRequirement.txt
+```
+
+
+```
+WinInstall.bat
 ```
 Note: in this `install.sh`, we use python venv by default. If you prefer conda, uncomment the conda and comment venv in the file and run the same command. 
 
