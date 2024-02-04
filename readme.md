@@ -49,6 +49,9 @@ git clone https://github.com/CGMikeG/Magic123ForWindows.git
 ```
 
 ### Install Environment 
+```
+pip3 install torch torchvision torchaudio
+```
 
 ```
 pip install magic123WinRequirement.txt
