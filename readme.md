@@ -43,6 +43,7 @@ Official PyTorch Implementation of Magic123: One Image to High-Quality 3D Object
 
 # Install
 Tested on Windows 10 and 11 using Cuda 11.8
+I have just started working on this today so please be patient.
 ```
 git clone https://github.com/CGMikeG/Magic123ForWindows.git
 ```
@@ -137,52 +138,54 @@ textual inversion is tedious (requires ~2.5 hours optimization), if you want to 
 
 - Run Magic123 coarse stage without textual inversion, takes ~40 mins
     ```
-    export RUN_ID='default-a-full-body-ironman'
-    export DATA_DIR='data/demo/a-full-body-ironman'
-    export IMAGE_NAME='rgba.png'
-    export FILENAME=$(basename $DATA_DIR)
-    export dataset=$(basename $(dirname $DATA_DIR))
-    CUDA_VISIBLE_DEVICES=0 python main.py -O \
-    --text "A high-resolution DSLR image of a full body ironman" \
-    --sd_version 1.5 \
-    --image ${DATA_DIR}/${IMAGE_NAME} \
-    --workspace out/magic123-${RUN_ID}-coarse/$dataset/magic123_${FILENAME}_${RUN_ID}_coarse \
-    --optim adam \
-    --iters 5000 \
-    --guidance SD zero123 \
-    --lambda_guidance 1.0 40 \
-    --guidance_scale 100 5 \
-    --latent_iter_ratio 0 \
-    --normal_iter_ratio 0.2 \
-    --t_range 0.2 0.6 \
-    --bg_radius -1 \
+    set RUN_ID=default-a-full-body-ironman
+    set DATA_DIR=data\demo\a-full-body-ironman
+    set IMAGE_NAME=rgba.png
+    for /f %%i in ("%DATA_DIR%") do set FILENAME=%%~nxi
+    for /f %%i in ("data\demo\a-full-body-ironman") do set dataset=%%~nxi
+    set CUDA_VISIBLE_DEVICES=0
+    python main.py -O ^
+    --text "A high-resolution DSLR image of a full body ironman" ^
+    --sd_version 1.5 ^
+    --image %DATA_DIR%\%IMAGE_NAME% ^
+    --workspace out\magic123-%RUN_ID%-coarse\%dataset%\magic123_%FILENAME%_%RUN_ID%_coarse ^
+    --optim adam ^
+    --iters 5000 ^
+    --guidance SD zero123 ^
+    --lambda_guidance 1.0 40 ^
+    --guidance_scale 100 5 ^
+    --latent_iter_ratio 0 ^
+    --normal_iter_ratio 0.2 ^
+    --t_range 0.2 0.6 ^
+    --bg_radius -1 ^
     --save_mesh
     ```
 
 - Run Magic123 fine stage without textual inversion, takes around ~20 mins 
     ```
-    export RUN_ID='default-a-full-body-ironman'
-    export RUN_ID2='dmtet'
-    export DATA_DIR='data/demo/a-full-body-ironman'
-    export IMAGE_NAME='rgba.png'
-    export FILENAME=$(basename $DATA_DIR)
-    export dataset=$(basename $(dirname $DATA_DIR))
-    CUDA_VISIBLE_DEVICES=0 python main.py -O \
-    --text "A high-resolution DSLR image of a full body ironman" \
-    --sd_version 1.5 \
-    --image ${DATA_DIR}/${IMAGE_NAME} \
-    --workspace out/magic123-${RUN_ID}-${RUN_ID2}/$dataset/magic123_${FILENAME}_${RUN_ID}_${RUN_ID2} \
-    --dmtet --init_ckpt out/magic123-${RUN_ID}-coarse/$dataset/magic123_${FILENAME}_${RUN_ID}_coarse/checkpoints/magic123_${FILENAME}_${RUN_ID}_coarse.pth \
-    --iters 5000 \
-    --optim adam \
-    --known_view_interval 4 \
-    --latent_iter_ratio 0 \
-    --guidance SD zero123 \
-    --lambda_guidance 1e-3 0.01 \
-    --guidance_scale 100 5 \
-    --rm_edge \
-    --bg_radius -1 \
-    --save_mesh 
+    set RUN_ID=default-a-full-body-ironman
+    set RUN_ID2=dmtet
+    set DATA_DIR=data\demo\a-full-body-ironman
+    set IMAGE_NAME=rgba.png
+    for /f %%i in ("%DATA_DIR%") do set FILENAME=%%~nxi
+    for /f %%i in ("data\demo\a-full-body-ironman") do set dataset=%%~nxi
+    set CUDA_VISIBLE_DEVICES=0
+    python main.py -O ^
+    --text "A high-resolution DSLR image of a full body ironman" ^
+    --sd_version 1.5 ^
+    --image %DATA_DIR%\%IMAGE_NAME% ^
+    --workspace out\magic123-%RUN_ID%-%RUN_ID2%\%dataset%\magic123_%FILENAME%_%RUN_ID%_%RUN_ID2% ^
+    --dmtet --init_ckpt out\magic123-%RUN_ID%-coarse\%dataset%\magic123_%FILENAME%_%RUN_ID%_coarse\checkpoints\magic123_%FILENAME%_%RUN_ID%_coarse.pth ^
+    --iters 5000 ^
+    --optim adam ^
+    --known_view_interval 4 ^
+    --latent_iter_ratio 0 ^
+    --guidance SD zero123 ^
+    --lambda_guidance 1e-3 0.01 ^
+    --guidance_scale 100 5 ^
+    --rm_edge ^
+    --bg_radius -1 ^
+    --save_mesh
     ```
 
 ### Run ablation studies
